@@ -1,0 +1,36 @@
+module de1soc (
+    input KEY0,
+    input [9:0] SW,
+    output [6:0] HEX0
+);
+
+    wire [7:0] address;
+    wire [7:0] memory_data;
+    wire manual_clk;
+
+    // Counter advances when the button is pressed.
+    assign manual_clk = ~KEY0;
+
+    counter_8bit counter (
+        .clk    (manual_clk),
+        .reset  (SW[0]),
+        .enable (SW[1]),
+        .load   (SW[2]),
+        .data   ({1'b0, SW[9:3]}),
+        .count  (address)
+    );
+
+    ram_v1 ram (
+        .address (address[4:0]), // Select locations 0-31
+        .clock   (KEY0),
+        .data    (8'b00000000),  // Unused write data
+        .wren    (1'b0),         // Never write
+        .q       (memory_data)   // Value read from memory
+    );
+
+    hex_7seg decoder (
+        .bin (memory_data[3:0]),
+        .seg (HEX0)
+    );
+
+endmodule
