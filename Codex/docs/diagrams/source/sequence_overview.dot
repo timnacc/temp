@@ -1,0 +1,28 @@
+digraph Overview {
+
+    graph [bgcolor="#ffffff", fontname="DejaVu Sans", fontsize=22,
+           labelloc=t, pad="0.4", nodesep="1.0", ranksep="0.85", dpi=120];
+    node [fontname="DejaVu Sans", fontsize=13, color="#475569",
+          penwidth=1.5, style=filled, fillcolor="#f1f5f9", margin="0.16,0.12"];
+    edge [fontname="DejaVu Sans", fontsize=12, color="#64748b", penwidth=1.5,
+          arrowsize=0.8];
+
+    rankdir=LR;
+    label="Parts I-III - What the detector remembers";
+    node [shape=box, style="rounded,filled"];
+    entry [shape=point, width=0.1, label=""];
+    A [label="After reset\nNo samples remembered\nz = 0", fillcolor="#f1f5f9"];
+    ZERO [label="Remember a run of zeros\nLength: 1 -> 2 -> 3 -> 4 or more\nz = 1 only at 4 or more", fillcolor="#e0f2fe"];
+    ONE [label="Remember a run of ones\nLength: 1 -> 2 -> 3 -> 4 or more\nz = 1 only at 4 or more", fillcolor="#dcfce7"];
+    entry -> A [label="reset"];
+    A -> ZERO [label="First sample is 0", color="#0369a1"];
+    A -> ONE [label="First sample is 1", color="#15803d"];
+    ZERO -> ZERO [label="Another 0: extend the run", color="#0369a1"];
+    ONE -> ONE [label="Another 1: extend the run", color="#15803d"];
+    ZERO -> ONE [label="A 1 arrives\nStart a NEW run of length 1", color="#15803d"];
+    ONE -> ZERO [label="A 0 arrives\nStart a NEW run of length 1", color="#0369a1"];
+    { rank=same; ZERO; ONE; }
+    note [label="One sample = one KEY0 press.\nChanging input breaks the previous run.\nReset returns from anywhere to no remembered samples.\nEach colored box summarizes FOUR states in the detailed FSM.", fillcolor="#f8fafc"];
+    ZERO -> note [style=invis];
+    ONE -> note [style=invis];
+}

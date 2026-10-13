@@ -1,0 +1,52 @@
+digraph FSM {
+
+    graph [bgcolor="#ffffff", fontname="DejaVu Sans", fontsize=22,
+           labelloc=t, pad="0.4", nodesep="1.0", ranksep="0.85", dpi=120];
+    node [fontname="DejaVu Sans", fontsize=13, color="#475569",
+          penwidth=1.5, style=filled, fillcolor="#f1f5f9", margin="0.16,0.12"];
+    edge [fontname="DejaVu Sans", fontsize=12, color="#64748b", penwidth=1.5,
+          arrowsize=0.8];
+
+    rankdir=TB;
+    label="Part II - Binary sequence detector";
+    A [shape=ellipse, group="start", fillcolor="#f1f5f9", label="A: No samples yet\nz = 0\n0000"];
+    B [shape=ellipse, group="zeros", fillcolor="#e0f2fe", label="B: One zero\nz = 0\n0001"];
+    C [shape=ellipse, group="zeros", fillcolor="#e0f2fe", label="C: Two zeros\nz = 0\n0010"];
+    D [shape=ellipse, group="zeros", fillcolor="#e0f2fe", label="D: Three zeros\nz = 0\n0011"];
+    E [shape=ellipse, group="zeros", fillcolor="#fef3c7", label="E: Four or more zeros\nz = 1\n0100"];
+    F [shape=ellipse, group="ones", fillcolor="#dcfce7", label="F: One one\nz = 0\n0101"];
+    G [shape=ellipse, group="ones", fillcolor="#dcfce7", label="G: Two ones\nz = 0\n0110"];
+    H [shape=ellipse, group="ones", fillcolor="#dcfce7", label="H: Three ones\nz = 0\n0111"];
+    I [shape=ellipse, group="ones", fillcolor="#fef3c7", label="I: Four or more ones\nz = 1\n1000"];
+    entry [shape=point, width=0.1, label=""];
+    entry -> A [label="reset"];
+    A -> B [label="w = 0", color="#0369a1", fontcolor="#0369a1"];
+    A -> F [label="w = 1", color="#15803d", fontcolor="#15803d"];
+    { rank=same; B; F; }
+    B -> F [style=invis, weight=15];
+    { rank=same; C; G; }
+    C -> G [style=invis, weight=15];
+    { rank=same; D; H; }
+    D -> H [style=invis, weight=15];
+    { rank=same; E; I; }
+    E -> I [style=invis, weight=15];
+    B -> C [label="w = 0", color="#0369a1", fontcolor="#0369a1", weight=10];
+    C -> D [label="w = 0", color="#0369a1", fontcolor="#0369a1", weight=10];
+    D -> E [label="w = 0", color="#0369a1", fontcolor="#0369a1", weight=10];
+    E -> E [label="w = 0", color="#0369a1", fontcolor="#0369a1", weight=10];
+    F -> G [label="w = 1", color="#15803d", fontcolor="#15803d", weight=10];
+    G -> H [label="w = 1", color="#15803d", fontcolor="#15803d", weight=10];
+    H -> I [label="w = 1", color="#15803d", fontcolor="#15803d", weight=10];
+    I -> I [label="w = 1", color="#15803d", fontcolor="#15803d", weight=10];
+    B -> F [label="w = 1", constraint=false, color="#15803d", fontcolor="#15803d"];
+    C -> F [label="w = 1", constraint=false, color="#15803d", fontcolor="#15803d"];
+    D -> F [label="w = 1", constraint=false, color="#15803d", fontcolor="#15803d"];
+    E -> F [label="w = 1", constraint=false, color="#15803d", fontcolor="#15803d"];
+    F -> B [label="w = 0", constraint=false, color="#0369a1", fontcolor="#0369a1"];
+    G -> B [label="w = 0", constraint=false, color="#0369a1", fontcolor="#0369a1"];
+    H -> B [label="w = 0", constraint=false, color="#0369a1", fontcolor="#0369a1"];
+    I -> B [label="w = 0", constraint=false, color="#0369a1", fontcolor="#0369a1"];
+    note [shape=box, fillcolor="#f8fafc", fontsize=12, label="Read one arrow per KEY0 press.\nSW0 = 0 returns ANY state to A on that press.\nArrow colors: blue = zero, green = one.\nBottom line of each state: y[3:0].\nAmber states turn on LEDR9 (z = 1)."];
+    E -> note [style=invis];
+    I -> note [style=invis];
+}

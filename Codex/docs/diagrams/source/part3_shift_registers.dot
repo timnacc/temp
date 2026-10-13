@@ -1,0 +1,37 @@
+digraph ShiftRegisters {
+
+    graph [bgcolor="#ffffff", fontname="DejaVu Sans", fontsize=22,
+           labelloc=t, pad="0.4", nodesep="1.0", ranksep="0.85", dpi=120];
+    node [fontname="DejaVu Sans", fontsize=13, color="#475569",
+          penwidth=1.5, style=filled, fillcolor="#f1f5f9", margin="0.16,0.12"];
+    edge [fontname="DejaVu Sans", fontsize=12, color="#64748b", penwidth=1.5,
+          arrowsize=0.8];
+
+    rankdir=LR;
+    label="Part III - Detect the last four equal samples";
+    node [shape=box, style="rounded,filled"];
+    input_w [label="SW1\nNew sample w", fillcolor="#f1f5f9"];
+    invert [label="Invert\n~w"];
+    ones [label="ones[3:0]\nShift in w\nOlder bits <- newest bit", fillcolor="#dcfce7"];
+    zeros [label="zeros[3:0]\nShift in ~w\nOlder bits <- newest bit", fillcolor="#e0f2fe"];
+    all_ones [label="All four bits are 1?\n&ones", fillcolor="#dcfce7"];
+    all_zeros [label="All four bits are 1?\n&zeros", fillcolor="#e0f2fe"];
+    detect [label="Either result is true?\nOR", fillcolor="#fef3c7"];
+    output_z [label="LEDR9 = z\nFour zeros OR four ones", fillcolor="#fef3c7"];
+    clock [label="KEY0 press\nShift once", fillcolor="#f8fafc"];
+    reset [label="SW0 = 0 + KEY0 press\nClear BOTH registers to 0000", fillcolor="#f8fafc"];
+    input_w -> ones [label="w", color="#15803d"];
+    input_w -> invert [label="w", color="#0369a1"];
+    invert -> zeros [label="~w", color="#0369a1"];
+    ones -> all_ones -> detect;
+    zeros -> all_zeros -> detect;
+    detect -> output_z;
+    clock -> ones [style=dashed, constraint=false, label="clock"];
+    clock -> zeros [style=dashed, constraint=false];
+    reset -> ones [style=dashed, constraint=false, label="reset"];
+    reset -> zeros [style=dashed, constraint=false];
+    { rank=same; ones; zeros; }
+    { rank=same; all_ones; all_zeros; }
+    note [shape=box, fillcolor="#f8fafc", label="Example: sample four zeros after reset\nzeros: 0000 -> 0001 -> 0011 -> 0111 -> 1111\nz:           0         0         0         0         1\nThese are match-history bits, not named FSM states."];
+    output_z -> note [style=invis];
+}
