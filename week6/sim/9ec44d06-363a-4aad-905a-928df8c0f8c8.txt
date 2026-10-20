@@ -1,0 +1,38 @@
+`timescale 1ns/1ps
+
+module tb_chirp_beginner;
+    reg clk = 1'b0;
+    reg reset = 1'b1;
+    reg [7:0] X = 8'd0;
+    wire [7:0] Y;
+
+    reg [7:0] samples [0:1999]; // Space for the 2000 input samples.
+    integer i;
+    integer output_file;
+
+    fir_filter dut (.X(X), .clk(clk), .reset(reset), .Y(Y));
+
+    always #500000 clk = ~clk; // One full clock cycle = 1 ms.
+
+    initial begin
+        $readmemb("X.txt", samples); // Load the binary file into the array.
+        output_file = $fopen("Y.txt", "w");
+        if (output_file == 0) $fatal(1, "Cannot create Y.txt");
+
+        // The first rising edge resets the filter. Release reset after it.
+        @(negedge clk);
+        reset = 1'b0;
+
+        for (i = 0; i < 2000; i = i + 1) begin
+            X = samples[i];       // Give the filter the next input.
+            @(posedge clk);       // Let the filter process it.
+            #1;                   // Wait for Y to update.
+            $fwrite(output_file, "%08b\n", Y); // Save the output.
+            @(negedge clk);       // Wait before changing X again.
+        end
+
+        $fclose(output_file);
+        $display("Finished: 2000 filter outputs saved to Y.txt.");
+        $finish;
+    end
+endmodule
