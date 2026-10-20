@@ -1,0 +1,26 @@
+digraph fir_filter {
+    graph [rankdir=TB, bgcolor="white", fontname="Helvetica", nodesep=0.5, ranksep=0.6, label="Week 6 FIR - structural diagram\n(not a Quartus RTL Viewer export)", labelloc=t];
+    node [shape=box, style="rounded,filled", fillcolor="#eaf1f7", fontname="Helvetica", fontsize=12];
+    edge [fontname="Helvetica", fontsize=10];
+    X [shape=oval, label="X[7:0]\ncurrent sample"];
+    d1 [label="x_delay1[7:0]\n8 flip-flops"];
+    d2 [label="x_delay2[7:0]\n8 flip-flops"];
+    cm0 [label="cm0\n(X >> 2)\n+ (X >> 6)\n+ (X >> 7)"];
+    cm1 [label="cm1\n(X >> 3)\n+ (X >> 4)\n+ (X >> 5)"];
+    shift [label="a2 shifter\nx_delay2 >> 1"];
+    sum [label="10-bit adder\nzero-extended tap0 + tap1 + tap2\nmaximum = 247"];
+    Y [label="Y[7:0]\n8 output flip-flops"];
+    control [shape=note, fillcolor="#fff4d9", label="All registers: posedge clk\nsynchronous active-high reset\nnonblocking updates use old delays"];
+    {rank=same; X; d1; d2;}
+    {rank=same; cm0; cm1; shift;}
+    {rank=same; Y; control;}
+    X -> d1;
+    d1 -> d2;
+    X -> cm0;
+    d1 -> cm1;
+    d2 -> shift;
+    cm0 -> sum [label="tap0[7:0]"];
+    cm1 -> sum [label="tap1[7:0]"];
+    shift -> sum [label="tap2[7:0]"];
+    sum -> Y [label="sum[7:0]"];
+}

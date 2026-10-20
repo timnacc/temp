@@ -1,0 +1,49 @@
+{
+  "student_number": "042301097",
+  "sample_rate_hz": 1000,
+  "sample_count": 2000,
+  "last_sample_time_s": 1.999,
+  "last_instantaneous_frequency_hz": 499.75,
+  "exact_coefficients": [
+    0.2755681818181818,
+    0.22443181818181818,
+    0.5
+  ],
+  "approximate_coefficients": [
+    0.2734375,
+    0.21875,
+    0.5
+  ],
+  "filter_type": "low-pass, with a shallow stop-band and high-frequency rebound",
+  "coefficient_dc_gain": 0.9921875,
+  "coefficient_dc_gain_db": -0.06812497383823005,
+  "coefficient_cutoff_hz": 148.9578527060047,
+  "cutoff_relative_db": -3.0102999566398125,
+  "exact_coefficient_cutoff_hz": 149.16578691405402,
+  "fitted_coefficients": [
+    0.2680678831558643,
+    0.21574350500126052,
+    0.4998221477409545
+  ],
+  "fitted_dc_bias_codes": -1.9153834501972586,
+  "fitted_passband_gain_db": -0.14333345781242066,
+  "fitted_cutoff_hz": 149.26482393643101,
+  "fitted_rms_error_codes": 0.9322256431222276,
+  "chirp_cutoff_estimate_hz": 149.6535107126456,
+  "response_minimum_frequency_hz": 300.1,
+  "response_minimum_db": -13.293907795163362,
+  "nyquist_gain_db": -5.119032418575862,
+  "input_range": [
+    0,
+    255
+  ],
+  "output_range": [
+    0,
+    247
+  ],
+  "hdl_reference_max_error_codes": 0,
+  "mean_truncation_error_codes": -3.017474505755756,
+  "worst_truncation_error_codes": 6.0078125,
+  "constant_255_output": 247,
+  "verification": "Icarus Verilog: 256 inputs per multiplier, 4634 FIR cycles, 2000 chirp rows; Python: every row matches integer arithmetic"
+}
